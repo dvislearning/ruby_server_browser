@@ -4,12 +4,15 @@ require 'json'              # Get sockets from stdlib
 server = TCPServer.open(2000)  # Socket to listen on port 2000
 loop {                         # Servers run forever
   client = server.accept       # Wait for a client to connect
-  $/ = "END"
-  request =  client.gets.split("\r\n")
-  header = request[0].split(" ")
+
+  header =  client.gets.split(" ")
   command = header[0].upcase
   file = header[1]
   version = header[2]
+
+  
+  length = client.gets
+  content = client.gets
 
    case command
    when 'GET'
@@ -20,7 +23,7 @@ loop {                         # Servers run forever
        client.puts "404 Not Found"
      end
   when 'POST'
-    params = (JSON.parse(request[3]))
+    params = (JSON.parse(content))
     viking = params["viking"]
     individual_thanks = "<li>Name: #{viking["name"]}</li>\r\n<li>Email: #{viking["email"]}</li>"
     client.puts "POST #{file} #{version}\nFrom: #{viking["email"]}\nUser-Agent: HTTPTool/1.0\nContent-Type: application/x-www-form-urlencoded\nContent-Length: #{File.size(file)}\r\n\r\n\n"
