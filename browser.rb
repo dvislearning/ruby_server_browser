@@ -22,7 +22,7 @@ if method == 'POST'
   content = content.to_json
   request = "#{method} #{post_path} HTTP/1.0\nContent_length: #{content.length}\n#{content}\n"
 else
-  request = "#{method} #{get_path} HTTP/1.0\n"
+  request = "#{method} #{get_path} HTTP/1.0\n\n\n"
 end
 
 # This is the HTTP request we send to fetch a file
